@@ -6,7 +6,7 @@ class App extends React.Component {
     // super is a reference to the parents(React.Component)
     // constructor function
     super(props);
-    this.state = { lat: null };
+    this.state = { lat: null, errorMessage: '' };
 
     window.navigator.geolocation.getCurrentPosition(
       // success callback
@@ -14,13 +14,21 @@ class App extends React.Component {
         this.setState({ lat: position.coords.latitude})
       },
       // failure callback
-      err => console.log(err)
+      err => {
+        console.log(err.message)
+        this.setState({ errorMessage: err.message })
+      }
+
     );
   }
 
   render() {
     return (
-      <div>Latitude: {this.state.lat}</div>
+      <div>Latitude:
+        {
+          !this.state.errorMessage ? this.state.lat : this.state.errorMessage
+        }
+      </div>
     )
   }
 };
